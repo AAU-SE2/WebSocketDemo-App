@@ -1,7 +1,9 @@
 package at.aau.serg.websocketdemoapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,15 +11,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
+import at.aau.serg.websocketdemoapp.networking.WebSocketClient;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String WEBSOCKET_URI = "ws://localhost:8080/websocket-example-handler";
+    TextView textViewServerResponse;
+
+    WebSocketClient networkHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,37 +32,27 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonConnect = findViewById(R.id.buttonConnect);
         buttonConnect.setOnClickListener(v -> connectToWebSocketServer());
+
+        Button buttonSendMsg = findViewById(R.id.buttonSendMsg);
+        buttonSendMsg.setOnClickListener(v -> sendMessage());
+
+        textViewServerResponse = findViewById(R.id.textViewResponse);
+
+        networkHandler = new WebSocketClient();
     }
 
-    private void connectToWebSocketServer(){
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(WEBSOCKET_URI)
-                .build();
+    private void connectToWebSocketServer() {
+        // register a handler for received messages when setting up the connection
+        networkHandler.connectToServer(this::messageReceivedFromServer);
+    }
 
-        WebSocket webSocket = client.newWebSocket(request, new WebSocketListener() {
-            @Override
-            public void onOpen(WebSocket webSocket, Response response) {
-                // WebSocket connection opened
-            }
+    private void sendMessage() {
+        networkHandler.sendMessageToServer("test message");
+    }
 
-            @Override
-            public void onMessage(WebSocket webSocket, String text) {
-                // Received message
-            }
-
-            @Override
-            public void onClosed(WebSocket webSocket, int code, String reason) {
-                // WebSocket connection closed
-            }
-
-            @Override
-            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-                // WebSocket connection failure
-            }
-        });
-
-        webSocket.send("TEST message");
-
+    private void messageReceivedFromServer(String message) {
+        // TODO handle received messages
+        Log.d("Network", message);
+        textViewServerResponse.setText(message);
     }
 }
