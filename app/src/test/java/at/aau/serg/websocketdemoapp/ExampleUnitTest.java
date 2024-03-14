@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import at.aau.serg.websocketdemoapp.networking.WebSocketClient;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -15,7 +17,7 @@ class ExampleUnitTest {
         String first = "Hello";
         String second = "World";
 
-        String result = MainActivity.concatenateStrings(first, second);
+        String result = WebSocketClient.concatenateStrings(first, second);
 
         assertEquals("Hello World", result);
     }

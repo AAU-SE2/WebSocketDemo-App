@@ -65,4 +65,9 @@ public class WebSocketClient {
             super.finalize();
         }
     }
+
+    // Simple method to demonstrate unit testing and test coverage with sonarcloud
+    public static String concatenateStrings(String first, String second) {
+        return first + " " + second;
+    }
 }
