@@ -46,12 +46,12 @@ tasks.register('jacocoTestReport', JacocoReport) {
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${project.layout.buildDirectory}/intermediates/javac/debug", excludes: fileFilter)
+    def debugTree = fileTree(dir: "${layout.buildDirectory}/intermediates/javac/debug", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories.from = files([mainSrc])
     classDirectories.from = files([debugTree])
-    executionData.from = files("${project.layout.buildDirectory}/jacoco/testDebugUnitTest.exec")
+    executionData.from = files("${layout.buildDirectory}/jacoco/testDebugUnitTest.exec")
 }
 
 sonar {
@@ -60,7 +60,7 @@ sonar {
     property "sonar.organization", "aau-se2"
     property "sonar.host.url", "https://sonarcloud.io"
     property "sonar.java.coveragePlugin", "jacoco"
-    property "sonar.coverage.jacoco.xmlReportPaths", "${project.layout.projectDirectory}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+    property "sonar.coverage.jacoco.xmlReportPaths", "${layout.projectDirectory}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
   }
 }
 
